@@ -28,27 +28,29 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.TreeView1 = new System.Windows.Forms.TreeView();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.name = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.result = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.idr = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.disc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.parentNames = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.name = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.result = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
-            // treeView1
+            // TreeView1
             // 
-            this.treeView1.Location = new System.Drawing.Point(13, 13);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(121, 321);
-            this.treeView1.TabIndex = 0;
+            this.TreeView1.Location = new System.Drawing.Point(13, 13);
+            this.TreeView1.Name = "TreeView1";
+            this.TreeView1.Size = new System.Drawing.Size(121, 321);
+            this.TreeView1.TabIndex = 0;
+            this.TreeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView1_AfterSelect_1);
+            this.TreeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeView1_NodeMouseClick);
             // 
             // dataGridView1
             // 
@@ -61,6 +63,23 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(570, 321);
             this.dataGridView1.TabIndex = 1;
+            // 
+            // name
+            // 
+            this.name.HeaderText = "name";
+            this.name.Name = "name";
+            this.name.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // price
+            // 
+            this.price.HeaderText = "price";
+            this.price.Name = "price";
+            // 
+            // result
+            // 
+            this.result.HeaderText = "result";
+            this.result.Name = "result";
             // 
             // label1
             // 
@@ -98,26 +117,9 @@
             this.parentNames.HeaderText = "parentNames";
             this.parentNames.Name = "parentNames";
             // 
-            // name
-            // 
-            this.name.HeaderText = "name";
-            this.name.Name = "name";
-            this.name.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // price
-            // 
-            this.price.HeaderText = "price";
-            this.price.Name = "price";
-            // 
-            // result
-            // 
-            this.result.HeaderText = "result";
-            this.result.Name = "result";
-            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(275, 511);
+            this.button1.Location = new System.Drawing.Point(222, 376);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 4;
@@ -134,7 +136,7 @@
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.treeView1);
+            this.Controls.Add(this.TreeView1);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
@@ -146,17 +148,17 @@
 
         #endregion
 
-        private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.TreeView TreeView1;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dataGridView2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn idr;
-        private System.Windows.Forms.DataGridViewTextBoxColumn disc;
-        private System.Windows.Forms.DataGridViewTextBoxColumn parentNames;
         private System.Windows.Forms.DataGridViewComboBoxColumn name;
         private System.Windows.Forms.DataGridViewTextBoxColumn price;
         private System.Windows.Forms.DataGridViewTextBoxColumn result;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn idr;
+        private System.Windows.Forms.DataGridViewTextBoxColumn disc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn parentNames;
     }
 }
 
