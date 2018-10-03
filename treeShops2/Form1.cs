@@ -49,10 +49,12 @@ namespace treeShops2
             sqlCmd.ExecuteNonQuery();
             // создание таблицы конечных скидок
             
-            sqlCmd.CommandText = "drop table totaldiscount;" +
+            sqlCmd.CommandText = "drop table if exists totaldiscount;" +
                                  "create table totaldiscount(id integer, parent integer, discount integer, parentNames text);";
             sqlCmd.ExecuteNonQuery();
-            
+            sqlCmd.CommandText = "drop table if exists totaldiscounts;" +
+                                 "create table totaldiscounts(id integer, parent integer, discount integer, totaldisc text, pnames text);";
+            sqlCmd.ExecuteNonQuery();
             // заполнение таблицы магазинами
             try
             {
@@ -92,16 +94,29 @@ namespace treeShops2
                                 "inner join recurs on recurs.id = tree.parent) " +
                                 "insert into totaldiscount(id, parent, discount, parentNames ) select id, parent, discount, name from recurs ";
             sqlCmd.ExecuteNonQuery();
-            
-            // вывод таблицы конечных скидок
+
+            // заполнение таблицы со списком скидок и родителей
+            sqlCmd.CommandText = "delete from totaldiscounts;";
+            sqlCmd.ExecuteNonQuery();
+            sqlCmd.CommandText = "with recursive recurs  " +
+                                "as (select id, parent, discount, discount as name, '/' || name as pname " +
+                                "from tree " +
+                                "where parent is null " +
+                                "union all " +
+                                "select tree.id, tree.parent, tree.discount, recurs.name || ', ' || tree.discount, recurs.pname || '/' || tree.name " +
+                                "from tree " +
+                                "inner join recurs on recurs.id = tree.parent) " +
+                                "insert into totaldiscounts(id, parent, discount, totaldisc, pnames ) select id, parent, discount, name, pname from recurs ";
+            sqlCmd.ExecuteNonQuery();
+            // заполнение промежуточной таблицы
             DataTable dTable = new DataTable();
-            SQLiteDataAdapter adapter = new SQLiteDataAdapter("select id, discount, parentNames from totaldiscount", db);
+            SQLiteDataAdapter adapter = new SQLiteDataAdapter("select id, totaldisc, pnames from totaldiscounts", db);
             adapter.Fill(dTable);
             dataGridView2.Rows.Clear();
             for (int i = 0; i < dTable.Rows.Count; i++)
                 dataGridView2.Rows.Add(dTable.Rows[i].ItemArray);
             db.Close();
-            
+
             // получение древовидной структуры
             GetNodes(TreeView1.Nodes, 0);
 
@@ -179,27 +194,51 @@ namespace treeShops2
             db.Open();
             sqlCmd.Connection = db;
 
+            dataGridView3.Rows.Clear();
             for (int i = 0; i < dataGridView1.Rows.Count-1; i++)
             {
-                // получение конечной скидки по id
+                // получение конечной скидки по имени
                 sqlCmd.CommandText = "select id from tree where name = @name";
                 sqlCmd.Parameters.AddWithValue("@name", (string)dataGridView1[0, i].Value);
                 SQLiteDataReader reader = sqlCmd.ExecuteReader();
-                reader.Read();
-                int id = Convert.ToInt32(reader["id"]);
-                reader.Close();
-                sqlCmd.CommandText = "select discount from totaldiscount where id = @id";
-                sqlCmd.Parameters.AddWithValue("@id", id);
-                reader = sqlCmd.ExecuteReader();
-                reader.Read();
-                double discount = Convert.ToDouble(reader["discount"]);
-                reader.Close();
-                // получение цены
-                double price = Convert.ToDouble(dataGridView1[1, i].Value);
-                // расчет
-                double res = price - price * discount / 100;
-                //
-                dataGridView1.Rows[i].SetValues(dataGridView1[0, i].Value, price, res);
+                try
+                {
+                    reader.Read();
+                    int id = Convert.ToInt32(reader["id"]);
+                    reader.Close();
+                    sqlCmd.CommandText = "select discount from totaldiscount where id = @id";
+                    sqlCmd.Parameters.AddWithValue("@id", id);
+                    reader = sqlCmd.ExecuteReader();
+                    reader.Read();
+                    double discount = Convert.ToDouble(reader["discount"]);
+                    reader.Close();
+                    // получение цены
+                    double price = Convert.ToDouble(dataGridView1[1, i].Value);
+                    // расчет
+                    double res = price - price * discount / 100;
+                    // вывод результата
+                    dataGridView1.Rows[i].SetValues(dataGridView1[0, i].Value, price, res);
+                    // получение списка скидок
+                    string totaldisc ="";
+                    for (int j = 0; j < dataGridView2.Rows.Count; j++)
+                    {
+                        if (id == Convert.ToInt32(dataGridView2[0, j].Value))
+                        {
+                            totaldisc = (string)dataGridView2[1, j].Value;
+                            break;
+                        }
+                    }
+                    // заполнение таблицы элементов формул
+                    dataGridView3.Rows.Add(price, totaldisc);
+                    }
+                catch (SQLiteException exc)
+                {
+                    MessageBox.Show("Error: " + exc);
+                }
+                catch (SystemException sexc)
+                {
+                    MessageBox.Show("Error: Выберите город перед расчетом");
+                }
             }
             db.Close();
         }
