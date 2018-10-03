@@ -17,9 +17,7 @@ namespace treeShops2
         private String dbFileName = "def.db";
         private SQLiteConnection db;
         private SQLiteCommand sqlCmd;
-
-        private String dbStatus;
-
+        
         int i = 0;
 
         public Form1()
@@ -54,11 +52,7 @@ namespace treeShops2
             sqlCmd.CommandText = "drop table totaldiscount;" +
                                  "create table totaldiscount(id integer, parent integer, discount integer, parentNames text);";
             sqlCmd.ExecuteNonQuery();
-
-
-            dbStatus = "Connected";
-            label1.Text = dbStatus;
-
+            
             // заполнение таблицы магазинами
             try
             {
@@ -98,42 +92,25 @@ namespace treeShops2
                                 "inner join recurs on recurs.id = tree.parent) " +
                                 "insert into totaldiscount(id, parent, discount, parentNames ) select id, parent, discount, name from recurs ";
             sqlCmd.ExecuteNonQuery();
-
-            // заполнение списка магазинов
-            sqlCmd.CommandText = "select name, id, parent from tree";
-            SQLiteDataReader reader2 = sqlCmd.ExecuteReader();
             
-            List<TreeNode> nodes = new List<TreeNode>();
-            int j = 0;
-            while (reader2.Read())
-            {
-                name.Items.Add(Convert.ToString(reader2["name"]));
-
-                nodes.Add(new TreeNode((string)reader2["name"]));
-                nodes[j].Tag = Convert.ToInt32(reader2["id"]);
-                j++;
-            }
-
-            reader2.Close();
-
-            
-
-
-
             // вывод таблицы конечных скидок
             DataTable dTable = new DataTable();
             SQLiteDataAdapter adapter = new SQLiteDataAdapter("select id, discount, parentNames from totaldiscount", db);
             adapter.Fill(dTable);
             dataGridView2.Rows.Clear();
-            label1.Text = dTable.Rows.Count.ToString();
             for (int i = 0; i < dTable.Rows.Count; i++)
                 dataGridView2.Rows.Add(dTable.Rows[i].ItemArray);
             db.Close();
-
-
+            
+            // получение древовидной структуры
             GetNodes(TreeView1.Nodes, 0);
+
+            dataGridView1[0,0].Selected = true;
         }
 
+        // рекурсивная функция, 
+        // изначально i=0, 
+        // при совпадении уровня вложенности level и предка добавляется дочерний узел
         private void GetNodes(TreeNodeCollection nodes, int level)
         {
             while (i < dataGridView2.Rows.Count-1)
@@ -153,12 +130,11 @@ namespace treeShops2
                         if (item.Text == GetParent(node))
                             GetNodes(item.Nodes, level + 1);
                     }
-                    //GetNodes(nodes[nodes.Count - 1].Nodes, level + 1);
-
                 }
             }
         }
 
+        // получение имени предка
         private string GetParent(string s)
         {
             int ind = s.LastIndexOf('/');
@@ -167,6 +143,7 @@ namespace treeShops2
             s = s.Substring(ind+1);
             return s;
         }
+        // получение уровня узла
         private int GetLevel(string s)
         {
             int level = -1;
@@ -175,7 +152,7 @@ namespace treeShops2
                     level++;
             return level;
         }
-
+        // получение имени узла
         private string GetNodeName (string s, int level)
         {
             for (int i = -1; i < level; i++)
@@ -188,28 +165,23 @@ namespace treeShops2
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            TreeView1.AfterSelect += TreeView1_AfterSelect;
+
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            
-
-            
-        }
-
+        // событие кнопки "Расчет"
         private void button1_Click_1(object sender, EventArgs e)
         {
+            // подключение к бд
+            db = new SQLiteConnection("Data Source=" + dbFileName + ";");
+            sqlCmd = new SQLiteCommand();
+            if (!File.Exists(dbFileName))
+                SQLiteConnection.CreateFile(dbFileName);
+            db.Open();
+            sqlCmd.Connection = db;
+
             for (int i = 0; i < dataGridView1.Rows.Count-1; i++)
             {
-                db = new SQLiteConnection("Data Source=" + dbFileName + ";");
-                sqlCmd = new SQLiteCommand();
-
-                if (!File.Exists(dbFileName))
-                    SQLiteConnection.CreateFile(dbFileName);
-                db.Open();
-                sqlCmd.Connection = db;
-
+                // получение конечной скидки по id
                 sqlCmd.CommandText = "select id from tree where name = @name";
                 sqlCmd.Parameters.AddWithValue("@name", (string)dataGridView1[0, i].Value);
                 SQLiteDataReader reader = sqlCmd.ExecuteReader();
@@ -222,36 +194,19 @@ namespace treeShops2
                 reader.Read();
                 double discount = Convert.ToDouble(reader["discount"]);
                 reader.Close();
+                // получение цены
                 double price = Convert.ToDouble(dataGridView1[1, i].Value);
+                // расчет
                 double res = price - price * discount / 100;
-                
+                //
                 dataGridView1.Rows[i].SetValues(dataGridView1[0, i].Value, price, res);
-                db.Close();
             }
+            db.Close();
         }
+        // событие мыши, при выборе узла, имя магазина заполняется в таблице
         private void TreeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            dataGridView1[0, dataGridView1.Rows.Count - 1].Value = e.Node.Text;
-        }
-        private void TreeView1_AfterSelect(System.Object sender, TreeViewEventArgs e)
-        {
-
-            // Vary the response depending on which TreeViewAction
-            // triggered the event. 
-            switch ((e.Action))
-            {
-                case TreeViewAction.ByKeyboard:
-                    MessageBox.Show("You like the keyboard!");
-                    break;
-                case TreeViewAction.ByMouse:
-                    MessageBox.Show("You like the mouse!");
-                    break;
-            }
-        }
-
-        private void TreeView1_AfterSelect_1(object sender, TreeViewEventArgs e)
-        {
-            dataGridView1[0, dataGridView1.Rows.Count - 1].Value = e.Node.Text;
+            dataGridView1[0, dataGridView1.SelectedCells[0].RowIndex].Value = e.Node.Text;
         }
     }
 }

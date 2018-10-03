@@ -30,15 +30,14 @@
         {
             this.TreeView1 = new System.Windows.Forms.TreeView();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.name = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.result = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.label1 = new System.Windows.Forms.Label();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.button1 = new System.Windows.Forms.Button();
             this.idr = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.disc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.parentNames = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.button1 = new System.Windows.Forms.Button();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.result = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
@@ -47,9 +46,8 @@
             // 
             this.TreeView1.Location = new System.Drawing.Point(13, 13);
             this.TreeView1.Name = "TreeView1";
-            this.TreeView1.Size = new System.Drawing.Size(121, 321);
+            this.TreeView1.Size = new System.Drawing.Size(168, 321);
             this.TreeView1.TabIndex = 0;
-            this.TreeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView1_AfterSelect_1);
             this.TreeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.TreeView1_NodeMouseClick);
             // 
             // dataGridView1
@@ -59,36 +57,10 @@
             this.name,
             this.price,
             this.result});
-            this.dataGridView1.Location = new System.Drawing.Point(141, 13);
+            this.dataGridView1.Location = new System.Drawing.Point(187, 13);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(570, 321);
             this.dataGridView1.TabIndex = 1;
-            // 
-            // name
-            // 
-            this.name.HeaderText = "name";
-            this.name.Name = "name";
-            this.name.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.name.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // price
-            // 
-            this.price.HeaderText = "price";
-            this.price.Name = "price";
-            // 
-            // result
-            // 
-            this.result.HeaderText = "result";
-            this.result.Name = "result";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 511);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "label1";
             // 
             // dataGridView2
             // 
@@ -97,52 +69,73 @@
             this.idr,
             this.disc,
             this.parentNames});
-            this.dataGridView2.Location = new System.Drawing.Point(354, 340);
+            this.dataGridView2.Location = new System.Drawing.Point(319, 340);
             this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(357, 150);
+            this.dataGridView2.Size = new System.Drawing.Size(438, 150);
             this.dataGridView2.TabIndex = 3;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(160, 352);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(125, 42);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "Расчет цены";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // idr
             // 
             this.idr.HeaderText = "id";
             this.idr.Name = "idr";
+            this.idr.ReadOnly = true;
             // 
             // disc
             // 
-            this.disc.HeaderText = "disc";
+            this.disc.HeaderText = "скидка";
             this.disc.Name = "disc";
+            this.disc.ReadOnly = true;
             // 
             // parentNames
             // 
-            this.parentNames.HeaderText = "parentNames";
+            this.parentNames.HeaderText = "зависимости";
             this.parentNames.Name = "parentNames";
+            this.parentNames.ReadOnly = true;
             // 
-            // button1
+            // name
             // 
-            this.button1.Location = new System.Drawing.Point(222, 376);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            this.name.HeaderText = "Имя";
+            this.name.Name = "name";
+            this.name.ReadOnly = true;
+            this.name.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // price
+            // 
+            this.price.HeaderText = "Цена";
+            this.price.Name = "price";
+            // 
+            // result
+            // 
+            this.result.HeaderText = "Результат";
+            this.result.Name = "result";
+            this.result.ReadOnly = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 622);
+            this.ClientSize = new System.Drawing.Size(795, 512);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView2);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.TreeView1);
+            this.MaximumSize = new System.Drawing.Size(811, 551);
+            this.MinimumSize = new System.Drawing.Size(811, 551);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -150,12 +143,11 @@
 
         private System.Windows.Forms.TreeView TreeView1;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dataGridView2;
-        private System.Windows.Forms.DataGridViewComboBoxColumn name;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.DataGridViewTextBoxColumn price;
         private System.Windows.Forms.DataGridViewTextBoxColumn result;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridViewTextBoxColumn idr;
         private System.Windows.Forms.DataGridViewTextBoxColumn disc;
         private System.Windows.Forms.DataGridViewTextBoxColumn parentNames;
