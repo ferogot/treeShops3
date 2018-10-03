@@ -51,7 +51,7 @@ namespace treeShops2
             // создание таблицы конечных скидок
             
             sqlCmd.CommandText = "drop table totaldiscount;" +
-                                 "create table totaldiscount(id integer, discount integer, parentNames text);";
+                                 "create table totaldiscount(id integer, parent integer, discount integer, parentNames text);";
             sqlCmd.ExecuteNonQuery();
 
 
@@ -83,7 +83,7 @@ namespace treeShops2
             {
                 MessageBox.Show("Error:" + exc.Message);
             }
-
+            
             // заполнение таблицы с конечными скидками
             sqlCmd.CommandText = "delete from totaldiscount;";
             sqlCmd.ExecuteNonQuery();
@@ -95,8 +95,55 @@ namespace treeShops2
                                 "select tree.id, tree.parent, recurs.discount + tree.discount, recurs.name || tree.name || '/' " +
                                 "from tree " +
                                 "inner join recurs on recurs.id = tree.parent) " +
-                                "insert into totaldiscount(id, discount, parentNames ) select id, discount, name from recurs ";
+                                "insert into totaldiscount(id, parent, discount, parentNames ) select id, parent, discount, name from recurs ";
             sqlCmd.ExecuteNonQuery();
+
+            // заполнение списка магазинов
+            sqlCmd.CommandText = "select name, id, parent from tree";
+            SQLiteDataReader reader2 = sqlCmd.ExecuteReader();
+            
+            List<TreeNode> nodes = new List<TreeNode>();
+            int j = 0;
+            while (reader2.Read())
+            {
+                name.Items.Add(Convert.ToString(reader2["name"]));
+
+                nodes.Add(new TreeNode((string)reader2["name"]));
+                nodes[j].Tag = Convert.ToInt32(reader2["id"]);
+                j++;
+            }
+
+            reader2.Close();
+
+            sqlCmd.CommandText = "select name, id, parent from tree";
+            reader2 = sqlCmd.ExecuteReader();
+            while (reader2.Read())
+            {
+                for (int i = 0; i < dataGridView2.Rows.Count - 1; i++)
+                {
+                    int parentId = Convert.ToInt32(reader2["parent"]);
+                    if (parentId != 0)
+                    {
+                        foreach (TreeNode node in nodes)
+                        {
+                            if ((int)node.Tag == parentId)
+                            {
+                                node.Nodes.Add(Convert.ToString(reader2["name"]));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        treeView1.Nodes.Add(Convert.ToString(reader2["name"]));
+                    }
+                }
+            }
+            reader2.Close();
+
+            if ((int)nodes[1].Tag == 1)
+                nodes[1].Nodes.Add("Amelia");
+            for (int i = 0; i < nodes.Count; i++)
+                treeView1.Nodes.Add(nodes[i]);
 
             // вывод таблицы конечных скидок
             DataTable dTable = new DataTable();
@@ -106,6 +153,8 @@ namespace treeShops2
             label1.Text = dTable.Rows.Count.ToString();
             for (int i = 0; i < dTable.Rows.Count; i++)
                 dataGridView2.Rows.Add(dTable.Rows[i].ItemArray);
+            db.Close();
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -118,6 +167,33 @@ namespace treeShops2
             
 
             
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            for (int i = 0; i < dataGridView1.Rows.Count-1; i++)
+            {
+                db = new SQLiteConnection("Data Source=" + dbFileName + ";");
+                db.Open();
+
+                sqlCmd.CommandText = "select id from tree where name = @name";
+                sqlCmd.Parameters.AddWithValue("@name", (string)dataGridView1[0, i].Value);
+                SQLiteDataReader reader3 = sqlCmd.ExecuteReader();
+                reader3.Read();
+                int id = Convert.ToInt32(reader3["id"]);
+                reader3.Close();
+                sqlCmd.CommandText = "select discount from totaldiscount where id = @id";
+                sqlCmd.Parameters.AddWithValue("@id", id);
+                reader3 = sqlCmd.ExecuteReader();
+                reader3.Read();
+                double discount = Convert.ToDouble(reader3["discount"]);
+                reader3.Close();
+                double price = Convert.ToDouble(dataGridView1[1, i].Value);
+                double res = price - price * discount / 100;
+                
+                dataGridView1.Rows[i].SetValues(dataGridView1[0, i].Value, price, res);
+                db.Close();
+            }
         }
     }
 }
