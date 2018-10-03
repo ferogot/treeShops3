@@ -1,0 +1,15 @@
+C:\Users\leha_\source\repos\treeShops2\treeShops2\obj\Debug\treeShops2.csprojAssemblyReference.cache
+C:\Users\leha_\source\repos\treeShops2\treeShops2\obj\Debug\treeShops2.Form1.resources
+C:\Users\leha_\source\repos\treeShops2\treeShops2\obj\Debug\treeShops2.Properties.Resources.resources
+C:\Users\leha_\source\repos\treeShops2\treeShops2\obj\Debug\treeShops2.csproj.GenerateResource.cache
+C:\Users\leha_\source\repos\treeShops2\treeShops2\obj\Debug\treeShops2.csproj.CoreCompileInputs.cache
+C:\Users\leha_\source\repos\treeShops2\treeShops2\bin\Debug\treeShops2.exe.config
+C:\Users\leha_\source\repos\treeShops2\treeShops2\bin\Debug\treeShops2.exe
+C:\Users\leha_\source\repos\treeShops2\treeShops2\bin\Debug\treeShops2.pdb
+C:\Users\leha_\source\repos\treeShops2\treeShops2\bin\Debug\System.Data.SQLite.dll
+C:\Users\leha_\source\repos\treeShops2\treeShops2\bin\Debug\System.Data.SQLite.Linq.dll
+C:\Users\leha_\source\repos\treeShops2\treeShops2\bin\Debug\System.Data.SQLite.xml
+C:\Users\leha_\source\repos\treeShops2\treeShops2\bin\Debug\System.Data.SQLite.dll.config
+C:\Users\leha_\source\repos\treeShops2\treeShops2\obj\Debug\treeShops2.csproj.CopyComplete
+C:\Users\leha_\source\repos\treeShops2\treeShops2\obj\Debug\treeShops2.exe
+C:\Users\leha_\source\repos\treeShops2\treeShops2\obj\Debug\treeShops2.pdb
