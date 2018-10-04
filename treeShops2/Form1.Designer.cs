@@ -28,13 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.TreeView1 = new System.Windows.Forms.TreeView();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.price = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.result = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.idr = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.disc = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -42,10 +44,9 @@
             this.button1 = new System.Windows.Forms.Button();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.rprice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.discounts = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.result = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rMarketDiscount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rDiscountParent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
@@ -71,6 +72,34 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(570, 321);
             this.dataGridView1.TabIndex = 1;
+            // 
+            // name
+            // 
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.name.DefaultCellStyle = dataGridViewCellStyle5;
+            this.name.HeaderText = "Имя";
+            this.name.Name = "name";
+            this.name.ReadOnly = true;
+            this.name.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // price
+            // 
+            this.price.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.price.DefaultCellStyle = dataGridViewCellStyle6;
+            this.price.HeaderText = "Цена";
+            this.price.Name = "price";
+            this.price.Width = 58;
+            // 
+            // result
+            // 
+            this.result.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.result.DefaultCellStyle = dataGridViewCellStyle7;
+            this.result.HeaderText = "Результат";
+            this.result.Name = "result";
+            this.result.ReadOnly = true;
+            this.result.Width = 84;
             // 
             // dataGridView2
             // 
@@ -119,63 +148,43 @@
             this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView3.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.rprice,
-            this.discounts});
-            this.dataGridView3.Location = new System.Drawing.Point(783, 13);
+            this.rMarketDiscount,
+            this.rDiscountParent,
+            this.rResult});
+            this.dataGridView3.Location = new System.Drawing.Point(771, 13);
             this.dataGridView3.Name = "dataGridView3";
-            this.dataGridView3.Size = new System.Drawing.Size(355, 321);
+            this.dataGridView3.Size = new System.Drawing.Size(439, 321);
             this.dataGridView3.TabIndex = 5;
             // 
             // rprice
             // 
             this.rprice.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.rprice.DefaultCellStyle = dataGridViewCellStyle4;
-            this.rprice.HeaderText = "Цена";
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.rprice.DefaultCellStyle = dataGridViewCellStyle8;
+            this.rprice.HeaderText = "Price";
             this.rprice.Name = "rprice";
-            this.rprice.Width = 58;
+            this.rprice.Width = 56;
             // 
-            // discounts
+            // rMarketDiscount
             // 
-            this.discounts.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.discounts.DefaultCellStyle = dataGridViewCellStyle5;
-            this.discounts.HeaderText = "Скидки";
-            this.discounts.Name = "discounts";
-            this.discounts.Width = 69;
+            this.rMarketDiscount.HeaderText = "Discount";
+            this.rMarketDiscount.Name = "rMarketDiscount";
             // 
-            // name
+            // rDiscountParent
             // 
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.name.DefaultCellStyle = dataGridViewCellStyle1;
-            this.name.HeaderText = "Имя";
-            this.name.Name = "name";
-            this.name.ReadOnly = true;
-            this.name.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.rDiscountParent.HeaderText = "DiscountParent";
+            this.rDiscountParent.Name = "rDiscountParent";
             // 
-            // price
+            // rResult
             // 
-            this.price.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.price.DefaultCellStyle = dataGridViewCellStyle2;
-            this.price.HeaderText = "Цена";
-            this.price.Name = "price";
-            this.price.Width = 58;
-            // 
-            // result
-            // 
-            this.result.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.result.DefaultCellStyle = dataGridViewCellStyle3;
-            this.result.HeaderText = "Результат";
-            this.result.Name = "result";
-            this.result.ReadOnly = true;
-            this.result.Width = 84;
+            this.rResult.HeaderText = "Result";
+            this.rResult.Name = "rResult";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1150, 420);
+            this.ClientSize = new System.Drawing.Size(1222, 420);
             this.Controls.Add(this.dataGridView3);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView2);
@@ -206,7 +215,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn price;
         private System.Windows.Forms.DataGridViewTextBoxColumn result;
         private System.Windows.Forms.DataGridViewTextBoxColumn rprice;
-        private System.Windows.Forms.DataGridViewTextBoxColumn discounts;
+        private System.Windows.Forms.DataGridViewTextBoxColumn rMarketDiscount;
+        private System.Windows.Forms.DataGridViewTextBoxColumn rDiscountParent;
+        private System.Windows.Forms.DataGridViewTextBoxColumn rResult;
     }
 }
 

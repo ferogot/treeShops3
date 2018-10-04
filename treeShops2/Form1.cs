@@ -103,7 +103,7 @@ namespace treeShops2
                                 "from tree " +
                                 "where parent is null " +
                                 "union all " +
-                                "select tree.id, tree.parent, tree.discount, recurs.name || ', ' || tree.discount, recurs.pname || '/' || tree.name " +
+                                "select tree.id, tree.parent, tree.discount, recurs.name || '+' || tree.discount, recurs.pname || '/' || tree.name " +
                                 "from tree " +
                                 "inner join recurs on recurs.id = tree.parent) " +
                                 "insert into totaldiscounts(id, parent, discount, totaldisc, pnames ) select id, parent, discount, name, pname from recurs ";
@@ -193,7 +193,7 @@ namespace treeShops2
                 SQLiteConnection.CreateFile(dbFileName);
             db.Open();
             sqlCmd.Connection = db;
-
+            // чистка таблица расчетов
             dataGridView3.Rows.Clear();
             for (int i = 0; i < dataGridView1.Rows.Count-1; i++)
             {
@@ -210,27 +210,34 @@ namespace treeShops2
                     sqlCmd.Parameters.AddWithValue("@id", id);
                     reader = sqlCmd.ExecuteReader();
                     reader.Read();
-                    double discount = Convert.ToDouble(reader["discount"]);
+                    double totaldiscount = Convert.ToDouble(reader["discount"]);
                     reader.Close();
                     // получение цены
                     double price = Convert.ToDouble(dataGridView1[1, i].Value);
                     // расчет
-                    double res = price - price * discount / 100;
-                    // вывод результата
-                    dataGridView1.Rows[i].SetValues(dataGridView1[0, i].Value, price, res);
+                    double res = price - price * totaldiscount / 100;
                     // получение списка скидок
-                    string totaldisc ="";
+                    string totalDiscountList ="";
                     for (int j = 0; j < dataGridView2.Rows.Count; j++)
                     {
                         if (id == Convert.ToInt32(dataGridView2[0, j].Value))
                         {
-                            totaldisc = (string)dataGridView2[1, j].Value;
+                            totalDiscountList = (string)dataGridView2[1, j].Value;
                             break;
                         }
                     }
-                    // заполнение таблицы элементов формул
-                    dataGridView3.Rows.Add(price, totaldisc);
+                    // список скидок родителей
+                    string discountParent = "";
+                    // скидка в выбраном магазине
+                    string discountMarket = totalDiscountList;
+                    if (totalDiscountList.LastIndexOf('+') > 0)
+                    {
+                        discountParent = totalDiscountList.Substring(0, totalDiscountList.LastIndexOf('+'));
+                        discountMarket = totalDiscountList.Remove(0, totalDiscountList.LastIndexOf('+') + 1);
                     }
+                    // заполнение таблицы расчетов
+                    dataGridView3.Rows.Add(price, discountMarket, discountParent, res);
+                }
                 catch (SQLiteException exc)
                 {
                     MessageBox.Show("Error: " + exc);
